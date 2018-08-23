@@ -24,19 +24,21 @@ can be read from the Terraform direcfory. This is specified using the
 terraform_inv.ini file in the same directory as this script, pointing to the 
 location of the terraform.tfstate file to be inventoried
 
+```
 [TFSTATE]
 TFSTATE_FILE = ~/terraform/ibm/Demoapp2x/terraform.tfstate
 #TFSTATE_FILE = Users/JohnDoe/terraform/ibm/Demoapp2x/terraform.tfstate
 #TFSTATE_FILE = /usr/share/terraform/ibm/Demoapp2x/terraform.tfstate
+``` 
  
 ## Testing  
  
 Validate correct execution: 
-  With supplied test files - './terraform_inv.py -t test_files/terraformx.tfstate'
-  With ini file './terraform.py -i . --list'
+  With supplied test files - `./terraform_inv.py -t test_files/terraformx.tfstate`
+  With ini file `./terraform.py -i . --list`
 Successful execution returns groups with lists of hosts and _meta/hostvars with a detailed
 host listing.
 Validate successful operation with ansible:
-  With - 'ansible-inventory -i . --list'
+  With - `ansible-inventory -i . --list`
 
   
