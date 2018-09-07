@@ -3,6 +3,7 @@
 # Terraform-Ansible dynamic inventory for IBM Cloud
 # Copyright (c) 2018, IBM UK
 # steve_strutt@uk.ibm.com
+ti_version = '0.4'
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,14 +31,13 @@
 # #TFSTATE_FILE = Users/JohnDoe/terraform/ibm/Demoapp2x/terraform.tfstate
 # #TFSTATE_FILE = /usr/share/terraform/ibm/Demoapp2x/terraform.tfstate
 # 
-# Validate correct execution with - './terraform_inv.py --list'
+# Validate correct execution: 
+#   With supplied test files - './terraform_inv.py -t test_files/terraformx.tfstate'
+#   With ini file './terraform.py -i . --list'
 # Successful execution returns groups with lists of hosts and _meta/hostvars with a detailed
 # host listing.
-# Validate successful operation with ansible, with - 'ansible-inventory -i . --list'
-
-
-
-ti_version = '0.3'
+# Validate successful operation with ansible:
+#   With - 'ansible-inventory -i . --list'
 
 import json
 import configparser
@@ -56,16 +56,19 @@ def parse_params():
     # read location of terrafrom state file from ini if it exists 
     if not args.tfstate:
         dirpath = os.getcwd()
+        print ()
         config = configparser.ConfigParser()
         ini_file = 'terraform_inv.ini'
         try:
-            with open(ini_file) as in_file: 
-                config.read(ini_file)
+            # attempt to open first. Only proceed if found
+            with open(dirpath + "/inventory/" + ini_file) as in_file: 
+                config.read(dirpath + "/inventory/" + ini_file)
         except IOError as e:
             raise Exception("Unable to find or open specified ini file")
-        tfstate_file = config['TFSTATE']['TFSTATE_FILE'] # 'tfstate dir & file name'
-        tfstate_file = os.path.expanduser(tfstate_file)
-        args.tfstate = tfstate_file
+        print ()
+        tf_file = config['TFSTATE']['TFSTATE_FILE'] 
+        tf_file = os.path.expanduser(tf_file)
+        args.tfstate = tf_file
     return args
 
 
