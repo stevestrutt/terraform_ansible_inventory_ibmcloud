@@ -27,17 +27,18 @@ ti_version = '0.4'
 # terraform_inv.ini file in the same directory as this script, pointing to the 
 # location of the terraform.tfstate file to be inventoried
 # [TFSTATE]
-# TFSTATE_FILE = ~/terraform/ibm/Demoapp2x/terraform.tfstate
-# #TFSTATE_FILE = Users/JohnDoe/terraform/ibm/Demoapp2x/terraform.tfstate
+# TFSTATE]
+# TFSTATE_FILE = ../tr_test_files/terraform.tfstate
+# #TFSTATE_FILE = ~/terraform/ibm/Demoapp2x/terraform.tfstate
 # #TFSTATE_FILE = /usr/share/terraform/ibm/Demoapp2x/terraform.tfstate
 # 
 # Validate correct execution: 
-#   With supplied test files - './terraform_inv.py -t test_files/terraformx.tfstate'
-#   With ini file './terraform.py -i . --list'
+#   With supplied test files - './terraform_inv.py -t ../tr_test_files/terraform.tfstate'
+#   With ini file './terraform.py'
 # Successful execution returns groups with lists of hosts and _meta/hostvars with a detailed
 # host listing.
 # Validate successful operation with ansible:
-#   With - 'ansible-inventory -i . --list'
+#   With - 'ansible-inventory -i inventory --list'
 
 import json
 import configparser
@@ -60,12 +61,26 @@ def parse_params():
         config = configparser.ConfigParser()
         ini_file = 'terraform_inv.ini'
         try:
-            # attempt to open first. Only proceed if found
-            with open(dirpath + "/inventory/" + ini_file) as in_file: 
-                config.read(dirpath + "/inventory/" + ini_file)
-        except IOError as e:
-            raise Exception("Unable to find or open specified ini file")
-        print ()
+            # attempt to open ini file first. Only proceed if found
+            # assume execution from the ansible playbook directory
+            filepath = dirpath + "/inventory/" + ini_file
+            open(filepath) 
+            
+        except IOError:
+            try:
+                # If file is not found it may be because command is executed
+                # in inventory directory
+                filepath = dirpath + "/" + ini_file
+                open(filepath) 
+            
+            except IOError:
+                raise Exception("Unable to find or open specified ini file")
+            else:
+                config.read(filepath)
+        else: 
+            config.read(filepath)
+
+        config.read(filepath)
         tf_file = config['TFSTATE']['TFSTATE_FILE'] 
         tf_file = os.path.expanduser(tf_file)
         args.tfstate = tf_file
