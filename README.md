@@ -6,8 +6,13 @@ Copyright (c) 2018, IBM UK
 steve_strutt@uk.ibm.com
 ti_version = '0.4'
 
+## Ansible dynamic inventory for Terraform with IBM Cloud ##
+This dynamic inventory script is written for use with Ansible and Terraform on IBM Cloud. Details of how to setup the script can be found in the IBM Cloud documentation.
+http://................................
+
+
 ## Static and dynamic inventory
-Can be used alongside static inventory files in the same directory 
+This script can be used alongside static inventory files in the same directory 
 
 
 ## Terraform dependencies
@@ -22,24 +27,24 @@ To avoid co-mingling the Ansible and Terraform definitions in the same directory
 the terraform.tfstate defining the current state of the deployed infrastructure, 
 is read from the Terraform direcfory. This is specified using the  
 terraform_inv.ini file in the same directory as this script, pointing to the 
-location of the terraform.tfstate file to be inventoried
+location of the terraform.tfstate file to be inventoried. The tfstate file should be referenced by is full path and file name. 
 
 ```
 [TFSTATE]
-TFSTATE_FILE = ../tr_test_files/terraform.tfstate
-TFSTATE_FILE = ~/terraform/ibm/Demoapp2x/terraform.tfstate
-#TFSTATE_FILE = /usr/share/terraform/ibm/Demoapp2x/terraform.tfstate
+#TFSTATE_FILE = /nnn/nnn/nnn/tr_test_files/terraform.tfstate
+#TFSTATE_FILE = /Users/JohnDoe/terraform/ibm/app2x/terraform.tfstate
+#TFSTATE_FILE = /usr/share/terraform/ibm/app2x/terraform.tfstate
 ``` 
  
 ## Testing  
  
 Validate correct execution:
-  With supplied test files - `./terraform_inv.py -t ../tr_test_files/terraformx.tfstate` 
-  With ini file `./terraform.py` 
+-  With supplied test files - `./terraform_inv.py -t ../tr_test_files/terraform.tfstate` 
+-  With ini file `./terraform.py --list` 
 Successful execution returns groups with lists of hosts and _meta/hostvars with a detailed
 host listing. 
 Validate successful operation with ansible from the playbook directory:
-  With - `ansible-inventory -i inventory --list`
+-   `ansible-inventory -i inventory --list`
 
 
   

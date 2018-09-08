@@ -66,14 +66,14 @@ def parse_params():
             filepath = dirpath + "/inventory/" + ini_file
             open(filepath) 
             
-        except IOError:
+        except FileNotFoundError:
             try:
                 # If file is not found it may be because command is executed
                 # in inventory directory
                 filepath = dirpath + "/" + ini_file
                 open(filepath) 
             
-            except IOError:
+            except FileNotFoundError:
                 raise Exception("Unable to find or open specified ini file")
             else:
                 config.read(filepath)
