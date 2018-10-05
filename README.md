@@ -4,7 +4,7 @@ Sample Python script to dynamically parse terraform.tfstate file into Ansible in
 
 Copyright (c) 2018, IBM UK
 steve_strutt@uk.ibm.com
-ti_version = '0.4'
+ti_version = '0.6'
 
 ## Ansible dynamic inventory for Terraform with IBM Cloud ##
 This dynamic inventory script is written for use with Ansible and Terraform on IBM Cloud. Details of how to setup the script can be found in the IBM Cloud documentation.
